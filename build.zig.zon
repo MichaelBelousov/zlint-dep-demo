@@ -1,0 +1,16 @@
+.{
+    .name = .zlint_demo,
+    .version = "0.0.0",
+    .fingerprint = 0x716d94ce2986d7a6,
+    .minimum_zig_version = "0.16.0",
+    .dependencies = .{
+        .zlint = .{
+            .path = "../../opensource/zlint",
+        },
+    },
+    .paths = .{
+        "build.zig",
+        "build.zig.zon",
+        "src",
+    },
+}
