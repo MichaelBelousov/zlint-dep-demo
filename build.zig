@@ -52,7 +52,7 @@ pub fn build(b: *std.Build) void {
 
     const zlint_dep = b.dependency("zlint", .{
         .custom_rules = &[_]std.Build.LazyPath{
-            b.path("./build.zig.zon"),
+            b.path("./no_assert.zig"),
         },
     });
     const run_lint = zlint.addRunLint(b, zlint_dep);

@@ -2,21 +2,28 @@
 //! Disallows the use of `std.debug.assert`.
 
 const std = @import("std");
-const ast_utils = @import("../ast_utils.zig");
-const _rule = @import("../rule.zig");
-const _span = @import("../../span.zig");
+
+//const ast_utils = @import("../ast_utils.zig");
+const ast_utils = @import("zlint").ast_utils;
+//const _rule = @import("../rule.zig");
+const _rule = @import("zlint").rule;
+//const _span = @import("../../span.zig");
+const _span = @import("zlint").span;
 
 const Span = _span.Span;
 const LabeledSpan = _span.LabeledSpan;
-const LinterContext = @import("../lint_context.zig");
+//const LinterContext = @import("../lint_context.zig");
+const LinterContext = @import("zlint").lint_context;
 const Rule = _rule.Rule;
 const NodeWrapper = _rule.NodeWrapper;
 
-const Semantic = @import("../../Semantic.zig");
+//const Semantic = @import("../../Semantic.zig");
+const Semantic = @import("zlint").Semantic;
 const Ast = Semantic.Ast;
 const TokenIndex = Ast.TokenIndex;
 
-const Error = @import("../../Error.zig");
+//const Error = @import("../../Error.zig");
+const Error = @import("zlint").Error;
 const eql = std.mem.eql;
 
 pub const meta: Rule.Meta = .{
@@ -40,6 +47,9 @@ fn noAssertDiagnostic(ctx: *LinterContext, span: Span) Error {
 }
 
 pub fn runOnNode(self: *const NoAssert, wrapper: NodeWrapper, ctx: *LinterContext) void {
+    if (true) {
+        @panic("hello!");
+    }
     const ast = ctx.ast();
     const node = wrapper.node;
 
@@ -115,7 +125,8 @@ pub fn rule(self: *NoAssert) Rule {
     return Rule.init(self);
 }
 
-const RuleTester = @import("../tester.zig");
+//const RuleTester = @import("../tester.zig");
+const RuleTester = @import("zlint").tester;
 test NoAssert {
     const t = std.testing;
 
