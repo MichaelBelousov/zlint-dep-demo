@@ -3,26 +3,20 @@
 
 const std = @import("std");
 
-//const ast_utils = @import("../ast_utils.zig");
 const ast_utils = @import("zlint").ast_utils;
-//const _rule = @import("../rule.zig");
 const _rule = @import("zlint").rule;
-//const _span = @import("../../span.zig");
 const _span = @import("zlint").span;
 
 const Span = _span.Span;
 const LabeledSpan = _span.LabeledSpan;
-//const LinterContext = @import("../lint_context.zig");
 const LinterContext = @import("zlint").lint_context;
 const Rule = _rule.Rule;
 const NodeWrapper = _rule.NodeWrapper;
 
-//const Semantic = @import("../../Semantic.zig");
 const Semantic = @import("zlint").Semantic;
 const Ast = Semantic.Ast;
 const TokenIndex = Ast.TokenIndex;
 
-//const Error = @import("../../Error.zig");
 const Error = @import("zlint").Error;
 const eql = std.mem.eql;
 
@@ -42,21 +36,18 @@ fn noAssertDiagnostic(ctx: *LinterContext, span: Span) Error {
         "Using `std.debug.assert` is not allowed.",
         .{LabeledSpan{ .span = span }},
     );
-    d.help = .static("End-users don't want to see debug logs. Use `std.log` instead.");
+    d.help = .static("Congrats, this test rule worked!");
     return d;
 }
 
 pub fn runOnNode(self: *const NoAssert, wrapper: NodeWrapper, ctx: *LinterContext) void {
-    if (true) {
-        @panic("hello!");
-    }
     const ast = ctx.ast();
-    const node = wrapper.node;
 
-    switch (node.tag) {
-        .call, .call_comma => {},
-        else => return,
-    }
+    // `assert` takes a single argument, so this must handle `.call_one` as
+    // well as the multi-argument call tags.
+    var call_buf: [1]Ast.Node.Index = undefined;
+    const call = ast.fullCall(&call_buf, wrapper.idx) orelse return;
+
     if (self.allow_tests) {
         if (ast_utils.isInTest(ctx, wrapper.idx)) {
             return;
@@ -68,8 +59,8 @@ pub fn runOnNode(self: *const NoAssert, wrapper: NodeWrapper, ctx: *LinterContex
         }
     }
 
-    // .call/.call_comma data is .node_and_extra: [0]=callee
-    const callee = node.data.node_and_extra[0];
+    const callee = call.ast.fn_expr;
+    // SAFETY: assigned by every branch that doesn't return early.
     var assert_span: Span = undefined;
 
     switch (ast.nodeTag(callee)) {
@@ -125,7 +116,6 @@ pub fn rule(self: *NoAssert) Rule {
     return Rule.init(self);
 }
 
-//const RuleTester = @import("../tester.zig");
 const RuleTester = @import("zlint").tester;
 test NoAssert {
     const t = std.testing;
