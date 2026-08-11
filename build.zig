@@ -61,5 +61,5 @@ pub fn build(b: *std.Build) void {
     lint_step.dependOn(&run_lint.step);
 
     const test_lint_rules_step = b.step("test-lint-rules", "run tests for my custom rules");
-    test_lint_rules_step.dependOn(zlint.addCustomLintRulesTest(b, zlint_dep));
+    test_lint_rules_step.dependOn(zlint.addRunCustomLintRulesTest(b, zlint_dep));
 }
