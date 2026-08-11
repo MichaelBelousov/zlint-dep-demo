@@ -127,6 +127,7 @@ test NoAssert {
     const pass = &[_][:0]const u8{
         \\fn foo(Writer: type, w: *Writer) !void {
         \\  w.assert("writers are allowed", .{});
+        \\  std.debug.assert("This should not be here: {d}\n", .{42});
         \\}
         ,
         \\fn add(a: u32, b: u32) u32 {
