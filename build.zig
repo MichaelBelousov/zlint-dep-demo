@@ -53,9 +53,14 @@ pub fn build(b: *std.Build) void {
     const zlint_dep = b.dependency("zlint", .{
         .custom_rules = &[_]std.Build.LazyPath{
             b.path("./no_assert.zig"),
+            b.path("./no_unreachable.zig"),
         },
     });
     const run_lint = zlint.addRunLint(b, zlint_dep);
     const lint_step = b.step("lint", "run zlint");
     lint_step.dependOn(&run_lint.step);
+
+    //const run_lint_test = zlint.addRunLint(b, zlint_dep);
+    //const run_lint_step = b.step("lint", "run zlint");
+    //lint_step.dependOn(&run_lint.step);
 }

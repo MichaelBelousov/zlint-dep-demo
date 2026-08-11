@@ -3,13 +3,13 @@
 
 const std = @import("std");
 
-const ast_utils = @import("zlint").ast_utils;
-const _rule = @import("zlint").rule;
-const _span = @import("zlint").span;
+const ast_utils = @import("zlint").linter.ast_utils;
+const _rule = @import("zlint").linter.rule;
+const _span = @import("zlint").linter.span;
 
 const Span = _span.Span;
 const LabeledSpan = _span.LabeledSpan;
-const LinterContext = @import("zlint").lint_context;
+const LinterContext = @import("zlint").linter.lint_context;
 const Rule = _rule.Rule;
 const NodeWrapper = _rule.NodeWrapper;
 
@@ -17,7 +17,7 @@ const Semantic = @import("zlint").Semantic;
 const Ast = Semantic.Ast;
 const TokenIndex = Ast.TokenIndex;
 
-const Error = @import("zlint").Error;
+const Error = @import("zlint").linter.Error;
 const eql = std.mem.eql;
 
 pub const meta: Rule.Meta = .{
@@ -116,7 +116,7 @@ pub fn rule(self: *NoAssert) Rule {
     return Rule.init(self);
 }
 
-const RuleTester = @import("zlint").tester;
+const RuleTester = @import("zlint").linter.tester;
 test NoAssert {
     const t = std.testing;
 
